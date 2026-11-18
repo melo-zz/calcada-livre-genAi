@@ -32,9 +32,11 @@ def treinar(exemplos, saida="modelo/lora_qwen15b", base="Qwen/Qwen2.5-1.5B-Instr
                       "labels": [-100] * len(p_ids) + c_ids[len(p_ids):]})  # só aprende a resposta
     print(f"{len(dados)} exemplos de treino ({descartados} descartados por tamanho)")
 
+    passos = max(1, -(-len(dados) // (2 * 8))) * epocas      # passos de otimização totais
+    aquecimento = max(1, round(0.05 * passos))               # 5% de aquecimento (warmup_steps funciona em qualquer versão)
     args = TrainingArguments(
         output_dir="modelo/_tmp", per_device_train_batch_size=2, gradient_accumulation_steps=8,
-        num_train_epochs=epocas, learning_rate=lr, lr_scheduler_type="cosine", warmup_ratio=0.05,
+        num_train_epochs=epocas, learning_rate=lr, lr_scheduler_type="cosine", warmup_steps=aquecimento,
         fp16=True, logging_steps=5, save_strategy="no", report_to="none", seed=seed, optim="adamw_torch")
     trainer = Trainer(model=model, args=args, train_dataset=dados,
                       data_collator=DataCollatorForSeq2Seq(tok, padding=True, label_pad_token_id=-100))
