@@ -1,0 +1,14 @@
+transformers>=4.44
+peft>=0.12
+accelerate>=0.33
+sentence-transformers>=3.0
+beautifulsoup4>=4.12
+lxml>=5.0
+requests>=2.31
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.8
+fastapi>=0.111
+uvicorn>=0.30
+pytest>=8.0
+tabulate>=0.9
