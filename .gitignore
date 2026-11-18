@@ -1,0 +1,13 @@
+.env
+*.env
+__pycache__/
+*.pyc
+*.tmp
+.DS_Store
+modelo/
+.cache/
+*.safetensors
+*.gguf
+terraform.tfstate*
+*.tfvars
+.pytest_cache/
