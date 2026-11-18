@@ -101,10 +101,55 @@ def chunkear(paragrafos, fonte):
     return trechos
 
 
-def baixar_fonte(fonte, timeout=60):
-    r = requests.get(fonte["url"], timeout=timeout, headers={"User-Agent": "Mozilla/5.0 (GS-FIAP)"})
+PASTA_LOCAL = Path("fontes_html")
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.5",
+}
+
+
+def _copia_local(fonte):
+    """Copia da página salva em fontes_html/ (mesmo texto oficial do planalto.gov.br).
+    Existe porque o planalto.gov.br às vezes derruba conexões vindas de servidores em nuvem (ex.: Colab)."""
+    for nome in (Path(fonte["url"]).name, fonte["sigla"] + ".htm", fonte["sigla"] + ".html"):
+        p = PASTA_LOCAL / nome
+        if p.exists() and p.stat().st_size > 1000:
+            return p
+    return None
+
+
+def _via_wayback(fonte, timeout=60):
+    """Plano B: cópia pública do mesmo endereço no Internet Archive (o planalto bloqueia IPs de nuvem)."""
+    disp = requests.get("https://archive.org/wayback/available", params={"url": fonte["url"]}, timeout=timeout, headers=HEADERS).json()
+    snap = (disp.get("archived_snapshots") or {}).get("closest")
+    if not snap:
+        raise RuntimeError("sem cópia no Internet Archive")
+    ts = snap["timestamp"]
+    r = requests.get(f"https://web.archive.org/web/{ts}id_/{fonte['url']}", timeout=timeout, headers=HEADERS)
     r.raise_for_status()
     return _decodificar(r.content)
+
+
+def baixar_fonte(fonte, timeout=60, tentativas=2):
+    local = _copia_local(fonte)
+    if local is not None:
+        print(f"  (usando cópia salva: {local})")
+        return _decodificar(local.read_bytes())
+    ultimo = None
+    for _ in range(tentativas):
+        try:
+            r = requests.get(fonte["url"], timeout=timeout, headers=HEADERS)
+            r.raise_for_status()
+            return _decodificar(r.content)
+        except requests.RequestException as e:  # noqa: PERF203
+            ultimo = e
+    try:
+        html = _via_wayback(fonte, timeout)
+        print("  (planalto indisponível; usando cópia do Internet Archive)")
+        return html
+    except Exception as e2:  # noqa: BLE001
+        raise RuntimeError(f"planalto: {ultimo}; archive.org: {e2}") from e2
 
 
 def construir_base(destino="base", fontes=FONTES):
