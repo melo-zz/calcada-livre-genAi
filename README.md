@@ -2,6 +2,9 @@
 
 Mapa vivo de barreiras de acessibilidade nas calçadas de São Paulo, alimentado por um carrinho inspetor, por fotos de cidadãos e por dados abertos.
 
+🎥 **Vídeo de demonstração (2 a 3 min):** https://www.youtube.com/watch?v=QA1s17Hr8Qo  
+📄 **Relatório:** [`docs/RELATORIO.md`](docs/RELATORIO.md)
+
 ## Integrantes
 | Nome completo | RM |
 |---|---|
@@ -69,8 +72,6 @@ flowchart LR
 | C. RAG + LoRA | 100,0 | 53,7 | 100,0 | 19,6 |
 
 Busca: recall@1 = 0,61 e recall@3 = 0,85; limiar de "não consta" = 0,863. Detalhes, os 5 erros reais e a conclusão estão em [`docs/RELATORIO.md`](docs/RELATORIO.md).
-
-**Vídeo de demonstração (2 a 3 min):** https://www.youtube.com/watch?v=QA1s17Hr8Qo
 
 ## Como reproduzir (seed fixa = 42)
 1. Abra cada notebook de `notebooks/` no **Google Colab** com GPU T4 (Ambiente de execução → Alterar tipo → T4). O `REPO` da primeira célula já aponta para este repositório.
