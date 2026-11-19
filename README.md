@@ -70,6 +70,8 @@ flowchart LR
 
 Busca: recall@1 = 0,61 e recall@3 = 0,85; limiar de "não consta" = 0,863. Detalhes, os 5 erros reais e a conclusão estão em [`docs/RELATORIO.md`](docs/RELATORIO.md).
 
+**Vídeo de demonstração (2 a 3 min):** https://www.youtube.com/watch?v=QA1s17Hr8Qo
+
 ## Como reproduzir (seed fixa = 42)
 1. Abra cada notebook de `notebooks/` no **Google Colab** com GPU T4 (Ambiente de execução → Alterar tipo → T4). O `REPO` da primeira célula já aponta para este repositório.
 2. Rode **na ordem 01 → 02 → 03 → 04** (o 04 recria o limiar e treina o LoRA sozinho se não achar `modelo/lora_qwen15b`; o 05 é só a demonstração do vídeo).
