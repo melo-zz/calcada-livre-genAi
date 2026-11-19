@@ -107,4 +107,4 @@ Pergunta: "Quanto custa um cão-guia para pessoa com deficiência visual?" O tre
 - **Limitações:** modelo pequeno (1,5B), base só com leis federais (sem normas municipais nem a NBR 9050), apenas 51 casos de teste, avaliação por termo-chave (conservadora) e um único treino com uma única seed.
 - **Próximos passos:** busca híbrida BM25 + embeddings, mais casos de teste e mais exemplos de treino, revisão humana do gabarito, juiz humano ou LLM na avaliação e ajuste do LoRA para não perder acerto.
 - **Reprodutibilidade:** rodar os notebooks `01` a `04` em ordem no Colab (GPU T4). Nenhum modelo ou segredo vai para o GitHub.
-- Repositório: https://github.com/melo-zz/calcada-livre-genAi · Vídeo: COLE_AQUI
+- Repositório: https://github.com/melo-zz/calcada-livre-genAi · Vídeo: https://www.youtube.com/watch?v=QA1s17Hr8Qo
