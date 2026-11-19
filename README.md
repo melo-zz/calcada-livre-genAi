@@ -52,18 +52,30 @@ flowchart LR
 ## Estrutura
 | Pasta | Conteúdo |
 |---|---|
-| `notebooks/` | 01 base e casos · 02 busca/recall/limiar · 03 treino LoRA · 04 placar e erros (**com saídas salvas**) |
-| `base/` | `trechos.jsonl`, `fontes.csv`, `tabela_fontes.md` |
-| `avaliacao/` | `casos_teste.jsonl`, `placar.csv/.md/.png`, `limiar.png/.json`, `erros.md`, `alucinacoes.md` |
+| `docs/` | `RELATORIO.md` (relatório da entrega) e `img/` (gráficos) |
+| `notebooks/` | 01 base e casos · 02 busca/recall/limiar · 03 treino LoRA · 04 placar e erros · 05 demonstração do vídeo (**com saídas salvas**) |
+| `base/` | `trechos.jsonl` (1.258 trechos), `fontes.csv`, `tabela_fontes.md` |
+| `fontes_html/` | cópia local das 8 leis (o site do planalto bloqueia o Colab) |
+| `avaliacao/` | `casos.py`, `casos_teste.jsonl`, `recall.json`, `limiar.json/.png`, `placar.csv/.md/.png`, `interpretacao.md`, `erros.md`, `alucinacoes.md`, `loss_lora.png` |
 | `src/` | código (base, busca, prompts, schema, pipeline, avaliação, LoRA) |
 | `api/` | FastAPI + Ollama (`/perguntar`, `/explicar-ocorrencia`) |
 | `tests/` | `pytest` (schema, limiar, LGPD, métricas, chunker) |
 
+## Resultados (51 casos de teste: 41 "consta" e 10 "não consta")
+| Configuração | JSON válido % | Acerto % | Recusa correta % | Alucinação % |
+|---|---|---|---|---|
+| A. Sem contexto | 88,2 | 17,1 | 10,0 | 88,2 |
+| B. RAG simples | 95,1 | 70,7 | 90,0 | 19,6 |
+| C. RAG + LoRA | 100,0 | 53,7 | 100,0 | 19,6 |
+
+Busca: recall@1 = 0,61 e recall@3 = 0,85; limiar de "não consta" = 0,863. Detalhes, os 5 erros reais e a conclusão estão em [`docs/RELATORIO.md`](docs/RELATORIO.md).
+
 ## Como reproduzir (seed fixa = 42)
-1. Abra cada notebook de `notebooks/` no **Google Colab** com GPU T4 (Ambiente de execução → Alterar tipo → T4) e troque `REPO` na primeira célula pelo link do repositório.
-2. Rode **na ordem 01 → 02 → 03 → 04** (03 e 04 na mesma sessão, ou salve `modelo/lora_qwen15b` no Drive).
-3. Baixe cada notebook **com as saídas** (Arquivo → Fazer download → .ipynb) e faça commit em `notebooks/`, junto com `base/` e `avaliacao/` gerados.
-4. Testes locais: `pip install -r requirements.txt && python -m pytest tests -q`.
+1. Abra cada notebook de `notebooks/` no **Google Colab** com GPU T4 (Ambiente de execução → Alterar tipo → T4). O `REPO` da primeira célula já aponta para este repositório.
+2. Rode **na ordem 01 → 02 → 03 → 04** (o 04 recria o limiar e treina o LoRA sozinho se não achar `modelo/lora_qwen15b`; o 05 é só a demonstração do vídeo).
+3. O notebook 01 lê as leis da pasta `fontes_html/` (o planalto.gov.br bloqueia o Colab); se a pasta não existir, ele tenta o site e depois o Internet Archive.
+4. Baixe cada notebook **com as saídas** (Arquivo → Fazer download → .ipynb) e faça commit em `notebooks/`.
+5. Testes locais: `pip install -r requirements.txt && python -m pytest tests -q`.
 
 ### API local (integração com o MVP)
 ```bash
