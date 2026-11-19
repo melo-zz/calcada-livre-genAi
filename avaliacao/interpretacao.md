@@ -1,0 +1,6 @@
+- **Acerto:** 17.1% sem contexto, 70.7% com RAG e 53.7% com RAG + LoRA.
+- **Alucinação:** caiu de 88.2% (sem contexto) para 19.6% (RAG) e 19.6% (RAG + LoRA).
+- **Recusa correta ('não consta'):** 10.0% → 90.0% → 100.0%.
+- **Citação correta:** 0.0% → 70.7% → 56.1%; citação inventada: 88.2% → 0.0% → 0.0%.
+- **JSON válido (saídas do modelo):** 88.2% → 95.1% → 100.0%.
+- **Melhor configuração (menos alucinação, depois mais acerto):** B. RAG simples.

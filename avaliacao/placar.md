@@ -1,0 +1,5 @@
+| configuracao | casos | json_valido_% | acerto_% | recusa_correta_% | citacao_correta_% | citacao_inventada_% | alucinacao_% |
+|---|---|---|---|---|---|---|---|
+| A. Sem contexto | 51 | 88.2 | 17.1 | 10.0 | 0.0 | 88.2 | 88.2 |
+| B. RAG simples | 51 | 95.1 | 70.7 | 90.0 | 70.7 | 0.0 | 19.6 |
+| C. RAG + LoRA | 51 | 100.0 | 53.7 | 100.0 | 56.1 | 0.0 | 19.6 |
